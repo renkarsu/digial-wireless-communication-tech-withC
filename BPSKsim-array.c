@@ -14,7 +14,7 @@ typedef struct
     double Q ;
 }COMPLEX ;
 
-//return一様乱数
+//return一様乱数[0.0,1.0]
 double GenerateRateU(void)
 {
     return ( (double)rand() / (double)RAND_MAX ) ;
