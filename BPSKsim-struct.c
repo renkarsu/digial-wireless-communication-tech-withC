@@ -1,3 +1,5 @@
+//gcc -std=c99 BPSKsim-struct.c
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>

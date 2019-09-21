@@ -1,3 +1,5 @@
+//gcc -std=c99 BPSKsim-array.c
+
 //BPSKのBERを計算機シミュレーションで求め、理論値と比較する。
 //配列によるversion, 信号とノイズを配列に格納する
 #include <stdio.h>
