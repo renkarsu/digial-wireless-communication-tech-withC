@@ -1,9 +1,9 @@
 //BPSKのBERを計算機シミュレーションで求め、理論値と比較する。
 //配列によるversion, 信号とノイズを配列に格納する
-#include<stdio.h>
-#include<stdlib.h>
-#include<math.h>
-#include<time.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <time.h>
 #define PI acos(-1) //3.1415926535
 #define L 10000     //送信データビット数
 #define SNR_STEP 10 //誤り率を計算するSNRの値の数. SNR(signal-noise ratio): SN比
@@ -156,5 +156,5 @@ int main(void)
 
     PrintBER(SNR_STEP, SNRdB, BER) ;
     
-    return 0;
+    return 0 ;
 }
