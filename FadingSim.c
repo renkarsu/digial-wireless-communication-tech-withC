@@ -294,8 +294,9 @@ void MakeAwgn(SIG_SEQ n, double Pn)// n means noise
 double CalculateRayleigh(void)
 {
     double n = GenerateRateN() ;
+    double m = GenerateRateN() ;
     double c = 1/sqrt(2.0) ;
-    return sqrt( pow(n, 2.0) + pow(n, 2.0) ) * c ;
+    return sqrt( pow(n, 2.0) + pow(m, 2.0) ) * c ;
 }
 
 void MakeChCoeff(CHANNEL ch)
