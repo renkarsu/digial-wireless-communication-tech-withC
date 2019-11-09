@@ -37,13 +37,13 @@ COMPLEX MakeCorrelation(SIG_SEQ s, SIG_SEQ w, unsigned short conjFlag)
     return corr ;
 }
 
-void TvFliter(SIG_SEQ fltOut, SIG_SEQ fltIn, SIG_SEQ w, unsigned short conjFlag)
+void RunTvFilter(SIG_SEQ fltOut, SIG_SEQ fltIn, SIG_SEQ w, unsigned short conjFlag)
 {
     unsigned i, k, tapCount ;
     SIG_SEQ tap, fltIn_0add ;
     if( fltOut.len != fltIn.len + (w.len - 1) )
     {
-        printf("ERROR: TvFilter, channel input length don't match output\n") ;
+        printf("ERROR: RunTvFilter, channel input length don't match output\n") ;
         printf("It needs to be (channel out len) = (channel input len) + (tap num - 1).\n") ;
         exit(1) ;
     }
@@ -56,7 +56,7 @@ void TvFliter(SIG_SEQ fltOut, SIG_SEQ fltIn, SIG_SEQ w, unsigned short conjFlag)
 
         if(tap.sig == NULL || fltIn_0add.sig == NULL)
         {
-            printf("ERROR: TvFilter, failed memory capture.\n") ;
+            printf("ERROR: RunTvFilter, failed memory capture.\n") ;
             exit(1) ;
         }
         else

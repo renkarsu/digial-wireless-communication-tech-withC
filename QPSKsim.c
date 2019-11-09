@@ -126,7 +126,6 @@ void MakeRandData(DATA_SEQ d)//d means input data
 //AWGN発生
 void MakeAwgn(SIG_SEQ n, double Pn)// n means noise
 {
-    double r, t ;
     unsigned i ;
     for(int i = 0; i < n.len; ++i)
     {
