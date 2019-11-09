@@ -209,7 +209,7 @@ COMPLEX MakeCorrelation(SIG_SEQ s, SIG_SEQ w, unsigned short conjFlag)
 
 void RunTvFilter(SIG_SEQ fltOut, SIG_SEQ fltIn, SIG_SEQ w, unsigned short conjFlag)
 {
-    unsigned i, k, tapCount ;
+    unsigned i, k ;//, tapCount ;
     SIG_SEQ tap, fltIn_0add ;
     if( fltOut.len != fltIn.len + (w.len - 1) )
     {
@@ -283,7 +283,7 @@ void MakeMSEQ(SIG_SEQ mseq)
 void MakeAwgn(SIG_SEQ n, double Pn)// n means noise
 {
     unsigned i ;
-    for(int i = 0; i < n.len; ++i)
+    for(i = 0; i < n.len; ++i)
     {
         (n.sig + i) -> I = GenerateRateN() * sqrt(Pn/2) ;
         (n.sig + i) -> Q = GenerateRateN() * sqrt(Pn/2) ;
