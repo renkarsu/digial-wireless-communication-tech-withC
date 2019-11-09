@@ -207,13 +207,13 @@ COMPLEX MakeCorrelation(SIG_SEQ s, SIG_SEQ w, unsigned short conjFlag)
     return corr ;
 }
 
-void TvFliter(SIG_SEQ fltOut, SIG_SEQ fltIn, SIG_SEQ w, unsigned short conjFlag)
+void RunTvFilter(SIG_SEQ fltOut, SIG_SEQ fltIn, SIG_SEQ w, unsigned short conjFlag)
 {
     unsigned i, k, tapCount ;
     SIG_SEQ tap, fltIn_0add ;
     if( fltOut.len != fltIn.len + (w.len - 1) )
     {
-        printf("ERROR: TvFilter, channel input length don't match output\n") ;
+        printf("ERROR: RunTvFilter(), channel input length don't match output\n") ;
         printf("It needs to be (channel out len) = (channel input len) + (tap num - 1).\n") ;
         exit(1) ;
     }
@@ -226,7 +226,7 @@ void TvFliter(SIG_SEQ fltOut, SIG_SEQ fltIn, SIG_SEQ w, unsigned short conjFlag)
 
         if(tap.sig == NULL || fltIn_0add.sig == NULL)
         {
-            printf("ERROR: TvFilter, failed memory capture.\n") ;
+            printf("ERROR: RunTvFilter(), failed memory capture.\n") ;
             exit(1) ;
         }
         else
@@ -282,7 +282,6 @@ void MakeMSEQ(SIG_SEQ mseq)
 //AWGN発生
 void MakeAwgn(SIG_SEQ n, double Pn)// n means noise
 {
-    double r, t ;
     unsigned i ;
     for(int i = 0; i < n.len; ++i)
     {
@@ -317,4 +316,73 @@ void MakeChCoeff(CHANNEL ch)
     }
 }
 
-void
+void PassFading(CHANNEL ch, SIG_SEQ chIn)
+{
+    unsigned i ;
+    if( ch.output.len != ( chIn.len + N_FADING_CHANNEL_TAP - 1 ) )
+    {
+        printf( "Error: PassFading(), Didn't match the length of channel-output and channel-input" ) ;
+        printf( "There are necessity to satisfy "
+                "(channel-output length) = (channel-input length) "
+                "+ (the number of fading-channel taps - 1)" ) ;
+                exit(1) ;
+    }
+    MakeChCoeff(ch) ;
+
+    printf( "tvf-coefficient is\n" ) ;
+    for( i = 0; i < ch.coeff.len; ++i )
+        printf( "%f %f\n", (ch.coeff.sig + i) -> I, (ch.coeff.sig+i) -> Q ) ;
+
+    RunTvFilter(ch.output, chIn, ch.coeff, 0) ;
+}
+
+double CalculateSnrDb2NoisePower(double c_dB)
+{
+    return pow( 10, (-1) * c_dB / 10 ) ;
+}
+
+void SumVector(SIG_SEQ a, SIG_SEQ b, SIG_SEQ c)
+{
+    unsigned i ;
+    if(a.len != b.len || b.len != c.len)
+    {
+        printf("ERROR: SumVector, don't match length.\n") ;
+        exit(1) ;
+    }
+    else
+    {
+        for(i = 0; i < a.len; ++i)
+        {
+            (a.sig + i) -> I = (b.sig + i) -> I + (c.sig + i) -> I ;
+            (a.sig + i) -> Q = (b.sig + i) -> Q + (c.sig + i) -> Q ;
+        }
+    }
+}
+
+int main(void)
+{
+    TX_SIGNALS tx ;
+    RX_SIGNALS rx ;
+    CHANNEL ch ;
+
+    srand( time(NULL) ) ;
+
+    InitTx(&tx) ;
+    InitRX(&rx) ;
+    InitCh(&ch) ;
+
+    AllocateMemTx(&tx) ;
+    AllocateMemRx(&rx) ;
+    AllocateMemCh(&ch) ;
+
+    MakeMSEQ(tx.testSeq) ;
+    PassFading(ch, tx.testSeq) ;
+    MakeAwgn( rx.noise, CalculateSnrDb2NoisePower(10.0) ) ;
+    SumVector( rx.testSeq, ch.output, rx.noise ) ;
+
+    FreeMemTx(&tx) ;
+    FreeMemRx(&rx) ;
+    FreeMemCh(&ch) ;
+
+    return 0 ;
+}
