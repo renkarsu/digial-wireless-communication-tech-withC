@@ -242,8 +242,8 @@ void RunTvFilter(SIG_SEQ fltOut, SIG_SEQ fltIn, SIG_SEQ w, unsigned short conjFl
                     *(tap.sig + i) = *(fltIn_0add.sig + (tap.len - 1 + k) - i) ;
                     *(fltOut.sig + k) = MakeCorrelation(tap, w, conjFlag) ;
                 }
-                free(tap.sig) ;
-                free(fltIn_0add.sig) ;
+                //free(tap.sig) ;
+                //free(fltIn_0add.sig) ;
             }
         }
     }
@@ -261,7 +261,7 @@ void MakeMSEQ(SIG_SEQ mseq)
     {
         (mseq.sig + i) -> I = (double)tap[MSEQ_POL_LEN - 1] ;
         tmp = 0;
-        for(i = 0; i < MSEQ_POL_LEN; ++k)
+        for(k = 0; k < MSEQ_POL_LEN; ++k)
         {
             tmp += tap[k] * mseqPol[k] ;
             tmp = tmp % 2 ;
